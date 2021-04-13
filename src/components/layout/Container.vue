@@ -1,8 +1,10 @@
 <template>
-  <div id="container" ref="container">
-    <template v-if="ready">
-      <slot></slot>
-    </template>
+  <div class="box" ref="box">
+    <div id="container" ref="container">
+      <template v-if="ready">
+        <slot></slot>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -20,7 +22,10 @@ export default class Container extends Vue {
 
   // 容器 ref
   // eslint-disable-next-line
-  private dom:any = document
+  private dom: any = document
+  // eslint-disable-next-line
+  private domA: any = document
+
   // 容器的宽
   private width = 0
   // 容器的高
@@ -38,7 +43,6 @@ export default class Container extends Vue {
   }
 
   private async mounted () {
-    console.log(this.domOption)
     this.ready = false
     await this.init()
     this.updateStyle()
@@ -73,6 +77,7 @@ export default class Container extends Vue {
   private async init () {
     await this.$nextTick()
     this.dom = this.$refs.container
+    this.domA = this.$refs.box
     const {
       width,
       height
@@ -128,20 +133,31 @@ export default class Container extends Vue {
     const viewportHeight = document.body.clientHeight
     const realWidth = width || originalWidth
     const realHeight = height || originalHeight
-    this.dom.style.transform = `scale(${viewportWidth / realWidth}, ${viewportHeight / realHeight})`
+    const widthProportion = viewportWidth / realWidth
+    const heightProportion = viewportHeight / realHeight
+    const Proportion = widthProportion > heightProportion ? heightProportion : widthProportion
+    this.dom.style.transform = `scale(${Proportion}, ${Proportion})`
+    const containerRealWidth = (this.domOption.width * Proportion)
+    const marginWidth = (viewportWidth - containerRealWidth) / 2 + 'px'
+    this.domA.style.paddingLeft = `${marginWidth}`
   }
 }
 </script>
 
 <style scoped>
+.box{
+  height: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  background: #0b1631;
+}
 #container {
   overflow: hidden;
-  position: fixed;
+  left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  top: 0;
-  left: 0;
   z-index: 9999;
-  transform-origin: left top;
+  transform-origin: 0 0;
 }
 </style>

@@ -18,6 +18,6 @@ export default class Headers extends Vue {
 .head {
   width: 100%;
   height: 90px;
-  background: blue;
+  border: 1px saddlebrown solid;
 }
 </style>
