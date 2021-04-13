@@ -29,6 +29,6 @@ export default class Default extends Vue {
        lang="less">
 .main {
   overflow: hidden;
-  height: calc(100% - 90px);
+  height: calc(100% - 80px);
 }
 </style>
